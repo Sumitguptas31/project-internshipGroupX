@@ -6,7 +6,7 @@ const collegeschema= new mongoose.Schema(
         fullName: {type:String,required:true},
          logoLink: {type:String,required:true},
          isDeleted: {type:Boolean, default: false}
-
+        
 
        
     },{timestamps: true}
