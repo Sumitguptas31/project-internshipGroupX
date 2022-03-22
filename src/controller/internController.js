@@ -1,4 +1,5 @@
 const internmodel =require('../model/internmodel')
+const collegemodel = require('../model/collegemodel')
 
     
     
@@ -13,7 +14,7 @@ const isValidObjectId = function (objectId) {
 const collegeIntern=async function(req,res){
         try{
             let data=req.body
-            let { name,mobile,collegeId,email } = data
+            let { name,mobile,collegeName,email } = data
             if(Object.keys(data).length == 0){
                 res.status(400).send({status:false, msg:"Bad Request!"});
             }
@@ -44,18 +45,29 @@ const collegeIntern=async function(req,res){
             if(isMobileAlreadyUsed){
                 res.status(400).send({status:false,msg:"use another mobile"})
             }
-            if (!isValid(collegeId)) {
-                res.status(400).send({ status: false, msg: "collegeId is required" })
-                return
-            }
+           if(!isValid(collegeName)){
+            res.status(400).send({status:false,msg:"use another mobile"})
+           }
             let isemailAlreadyUsed = await internmodel.findOne({ email })
             if (isemailAlreadyUsed) {
                 res.status(400).send({ status: false, msg: "this email is already used, please provide another email" })
                 return
             }
+            let collegeDetails = await collegemodel.findOne({ name: collegeName })
+            if (!collegeDetails) {
+                res.status(404).send({ status: false, msg: "collegeName not exist" })
+                return
+            }
+
             else{
-                let interndata= await internmodel.create(data)
-                return res.status(201).send({ status: true, data:interndata });
+               let internData={
+                   name:req.body.name,
+                   email:req.body.email,
+                   mobile:req.body.mobile,
+                   collegeId: collegeDetails._id
+               }
+               let internCreated=await internmodel.create(internData)
+               res.status(201).send({status:true,msg:"data created",data:internCreated})
             }
         }
         catch(error){

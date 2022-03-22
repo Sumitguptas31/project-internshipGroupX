@@ -10,15 +10,17 @@ const college = async function(req,res){
   
     try{
         let data=req.body
-        let { name, fullName, logoLink } = data
+        let { name, fullName,logoLink } = data
         if(Object.keys(data).length ==0){
             res.status(400).send({status:false, msg:"Bad Request!"});
         }
         if(!isValid(name)){
             res.status(400).send({status:false, msg:"require name"});
+            return
         }
         if(!isValid(fullName)){
             res.status(400).send({status:false, msg:"require fullname"});
+            return
         }
         if(!isValid(logoLink)){
             res.status(400).send({status:false, msg:"require logolink"})
@@ -37,6 +39,7 @@ const college = async function(req,res){
         let logoLinkIsAlreadyUsed= await collegemodel.findOne({logoLink})
         if(logoLinkIsAlreadyUsed){
             res.status(400).send({status:false,msg:"use another logolink"})
+            return
         }
         else{
              let collegedata= await collegemodel.create(data)

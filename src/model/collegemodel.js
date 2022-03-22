@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const collegeschema= new mongoose.Schema(
     {
-         name: {type:String,required:true, unique:true}, 
+         name: {type:String, required:true,unique:true}, 
         fullName: {type:String,required:true},
-         logoLink: {type:String,required:true,isDeleted: {type:Boolean, default: false}}
+         logoLink: {type:String,required:true},
+         isDeleted: {type:Boolean, default: false}
 
 
        
